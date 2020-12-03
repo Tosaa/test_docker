@@ -13,12 +13,22 @@ For most use-cases, --cpus is a more convenient alternative.
 https://docs.docker.com/config/containers/resource_constraints/
 
 ### result
-The two container run beside each other and do alternate, but ther are breaks, which might occur because of other processes on the cpu.
+The two container run beside each other and do alternate. Each runtime should be 100 ms.
 
 ### how i tested
-i ran both container at the same time with the command:
+build:
+```
+ sudo docker build -t hello-demo .
+```
+ 
+i ran both container at the same time and on the same with the command:
 ``` 
-sudo docker run --cpuset-cpus=0 -t hello-demo test.py > log0.txt &! sudo docker run --cpuset-cpus=0 -t hello-demo test.py > log1.txt 
+sudo docker run --cpuset-cpus=0 -t hello-demo test.py > log0.txt &! sudo docker run --cpuset-cpus=0 -t hello-demo test2.py > log1.txt 
+```
+
+concat the sorted logs: 
+```
+cat log* | sort > log.txt 
 ```
 
 the container do have a very small start delay, but when the second container starts, they run alternating.
@@ -32,7 +42,7 @@ this can be shown by looking at the transitions between container 1 and containe
 1606983707.145903 ; 2
 1606983707.145913 ; 2
 1606983707.145919 ; 2
---- 100 ms runtime ?!
+--- 100 ms runtime ?! ---
 1606983707.152695 ; 2
 1606983707.152700 ; 2
 1606983707.152705 ; 2
@@ -40,7 +50,7 @@ this can be shown by looking at the transitions between container 1 and containe
 1606983707.152731 ; 1
 1606983707.152736 ; 1
 1606983707.152740 ; 1
---- 100 ms runtime ?!
+--- 100 ms runtime ?! ---
 1606983707.165859 ; 1
 1606983707.165864 ; 1
 1606983707.165868 ; 1
