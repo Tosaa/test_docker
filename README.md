@@ -22,3 +22,30 @@ sudo docker run --cpuset-cpus=0 -t hello-demo test.py > log0.txt &! sudo docker 
 ```
 
 the container do have a very small start delay, but when the second container starts, they run alternating.
+
+this can be shown by looking at the transitions between container 1 and container 2:
+
+```
+1606983707.145868 ; 1
+1606983707.145872 ; 1
+1606983707.145880 ; 1
+1606983707.145903 ; 2
+1606983707.145913 ; 2
+1606983707.145919 ; 2
+--- 100 ms runtime ?!
+1606983707.152695 ; 2
+1606983707.152700 ; 2
+1606983707.152705 ; 2
+1606983707.152721 ; 1
+1606983707.152731 ; 1
+1606983707.152736 ; 1
+1606983707.152740 ; 1
+--- 100 ms runtime ?!
+1606983707.165859 ; 1
+1606983707.165864 ; 1
+1606983707.165868 ; 1
+1606983707.165873 ; 1
+1606983707.165898 ; 2
+1606983707.165906 ; 2
+1606983707.165912 ; 2
+```
